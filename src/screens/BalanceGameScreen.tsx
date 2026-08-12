@@ -19,7 +19,7 @@ import { levels, Level } from '../lib/balance-game/levels';
 import { BallSkin, getSelectedSkin } from '../lib/balance-game/skins';
 import { incrementAchievement } from '../lib/balance-game/achievements';
 import { recordLevelComplete } from '../lib/balance-game/statistics';
-import { colors } from '../theme';
+import { WORLDS } from '../lib/balance-game/worlds';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
@@ -50,17 +50,11 @@ export function BalanceGameScreen({ navigation, route }: any) {
   const [selectedSkin, setSelectedSkin] = useState<BallSkin>('classic');
   const powerUpCountRef = useRef(0);
   
-  // Filter levels based on worldId
   const filteredLevels = React.useMemo(() => {
-    if (!worldId) return levels; // Show all if no worldId
-    
-    // Find world and get its level IDs
-    const { WORLDS } = require('../lib/balance-game/worlds');
-    const world = WORLDS.find((w: any) => w.id === worldId);
+    if (!worldId) return levels;
+    const world = WORLDS.find((w) => w.id === worldId);
     if (!world) return levels;
-    
-    // Filter levels to only those in this world
-    return levels.filter(level => world.levelIds.includes(level.id));
+    return levels.filter((level) => world.levelIds.includes(level.id));
   }, [worldId]);
 
   useEffect(() => {
